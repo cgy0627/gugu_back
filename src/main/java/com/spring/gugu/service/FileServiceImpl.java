@@ -40,7 +40,7 @@ public class FileServiceImpl implements FileService {
 			
 				try {
 					// 디렉토리에 파일 저장 - react>public>img 폴더를 절대경로로 지정
-					file.transferTo(new File("C:\\dev\\gugu\\final_999_react\\public\\img\\" + fileName));
+					file.transferTo(new File("C:\\Dev\\gugu\\final_999_react\\public\\" + fileName));
 				} catch (IllegalStateException | IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

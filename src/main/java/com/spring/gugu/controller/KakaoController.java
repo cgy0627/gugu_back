@@ -28,8 +28,9 @@ import com.spring.gugu.config.jwt.JwtProperties;
 import com.spring.gugu.dto.UserDTO;
 import com.spring.gugu.entity.User;
 import com.spring.gugu.model.OauthToken;
+import com.spring.gugu.service.FileServiceImpl;
 import com.spring.gugu.service.KakaoServiceImpl;
-import com.spring.gugu.service.S3Uploader;
+//import com.spring.gugu.service.S3Uploader;
 
 @RestController		// 메소드 리턴타입 객체를 json으로 자동 파싱 해준다. 이동이 아니라 값만 받는 용
 @RequestMapping(value = "/api")
@@ -40,7 +41,10 @@ public class KakaoController {
 	private KakaoServiceImpl kakaoService;
 	
 	@Autowired
-	private S3Uploader s3Uploader;
+	private FileServiceImpl fileService;
+	
+//	@Autowired
+//	private S3Uploader s3Uploader;
 	
 	// 우리 서버에 회원가입이 되어 있는지 확인
 	@GetMapping("/checkMember")
@@ -162,17 +166,19 @@ public class KakaoController {
     						@RequestParam(name = "files", required = false) MultipartFile file) {
     	
     	System.out.println("############프로필 업데이트");
-    	String fileName= "";
-    	
-    	if (file != null && file.getSize() != 0) {
-			try {
-					// s3 file 링크로 fileName 받아와서 postImg data로 저장하면 src로 걍 링크를 긁어오면 화면에 출력됨
-					fileName = s3Uploader.uploadFiles(file, "gugu-post");
-					System.out.println("s3 file url : "+fileName);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}		
-		}
+    	List<MultipartFile> files = new ArrayList<MultipartFile>();
+    	files.add(file);
+    	String fileName= fileService.uploadFile(files);
+
+//    	if (file != null && file.getSize() != 0) {
+//			try {
+//					// s3 file 링크로 fileName 받아와서 postImg data로 저장하면 src로 걍 링크를 긁어오면 화면에 출력됨
+//					fileName = s3Uploader.uploadFiles(file, "gugu-post");
+//					System.out.println("s3 file url : "+fileName);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}		
+//		}
     	
     	kakaoService.userUpdate(userId, email, nickname, fileName);
     }

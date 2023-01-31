@@ -2,6 +2,7 @@ package com.spring.gugu.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
+//import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.spring.gugu.common.dto.PageRequestDTO;
 import com.spring.gugu.common.dto.PageResultDTO;
 import com.spring.gugu.dto.PostDTO;
@@ -30,7 +31,7 @@ import com.spring.gugu.entity.User;
 import com.spring.gugu.service.FileServiceImpl;
 import com.spring.gugu.service.KakaoServiceImpl;
 import com.spring.gugu.service.PostServiceImpl;
-import com.spring.gugu.service.S3Uploader;
+//import com.spring.gugu.service.S3Uploader;
 
 import lombok.RequiredArgsConstructor;
 
@@ -44,7 +45,7 @@ public class PostController {
 	final PostServiceImpl postService;
 	final KakaoServiceImpl userService;
 	final FileServiceImpl fileService;
-	final S3Uploader s3Uploader;
+//	final S3Uploader s3Uploader;
 	
 	// 포스트 작성하기
 	@PostMapping("/post")
@@ -57,22 +58,25 @@ public class PostController {
 						HttpServletRequest request) {
 		
 		Long postNo = null;
-		String fileName = "";
-
+		
 		// localStroage의 user_id로 user 정보 get
 		UserDTO userDTO = userService.getUser(request);
 		System.out.println("######### insertDiary userDTO : " + userDTO.toString());
 		
-
-		if (file != null && file.getSize() != 0) {
-			try {
-				// s3 file 링크로 fileName 받아와서 postImg data로 저장하면 src로 걍 링크를 긁어오면 화면에 출력됨
-				fileName = s3Uploader.uploadFiles(file, "gugu-post");
-				System.out.println("s3 file url : "+fileName);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+//		String fileName = "";
+		List<MultipartFile> files = new ArrayList<MultipartFile>();
+    	files.add(file);
+    	String fileName= fileService.uploadFile(files);
+    	
+//		if (file != null && file.getSize() != 0) {
+//			try {
+//				// s3 file 링크로 fileName 받아와서 postImg data로 저장하면 src로 걍 링크를 긁어오면 화면에 출력됨
+//				fileName = s3Uploader.uploadFiles(file, "gugu-post");
+//				System.out.println("s3 file url : "+fileName);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}
 		
 
 		System.out.println("####"+content+"####");
@@ -158,17 +162,20 @@ public class PostController {
 
 		System.out.println("#################포스트 수정");
 
-		String fileName = fileImg;
+//		String fileName = fileImg;
+		List<MultipartFile> files = new ArrayList<MultipartFile>();
+    	files.add(file);
+    	String fileName= fileService.uploadFile(files);
 		
-		if (file != null && file.getSize() != 0) {
-			try {
-					// s3 file 링크로 fileName 받아와서 postImg data로 저장하면 src로 걍 링크를 긁어오면 화면에 출력됨
-					fileName = s3Uploader.uploadFiles(file, "gugu-post");
-					System.out.println("s3 file url : "+fileName);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}		
-		}
+//		if (file != null && file.getSize() != 0) {
+//			try {
+//					// s3 file 링크로 fileName 받아와서 postImg data로 저장하면 src로 걍 링크를 긁어오면 화면에 출력됨
+//					fileName = s3Uploader.uploadFiles(file, "gugu-post");
+//					System.out.println("s3 file url : "+fileName);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}		
+//		}
 		
 		postService.postDTOUpdate(postNo, content, fileName);
 		

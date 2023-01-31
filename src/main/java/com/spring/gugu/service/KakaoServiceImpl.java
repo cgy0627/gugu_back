@@ -21,7 +21,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import com.spring.gugu.service.S3Uploader;
+//import com.spring.gugu.service.S3Uploader;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -43,7 +43,10 @@ public class KakaoServiceImpl implements KakaoService {
 	KakaoRepository kakaoRepo;
 	
 	@Autowired
-	S3Uploader s3Uploader;
+	private FileServiceImpl fileService;
+	
+//	@Autowired
+//	S3Uploader s3Uploader;
 	
     //환경 변수 가져오기
 	@Value("${kakao.clientId}")
@@ -194,19 +197,21 @@ public class KakaoServiceImpl implements KakaoService {
 			profileGender = gender;
 		}
 		
-		String fileName = "";
-		
-		if (files != null) {
-			for(MultipartFile file : files) {
-				try {
-					// s3 file 링크로 fileName 받아와서 postImg data로 저장하면 src로 걍 링크를 긁어오면 화면에 출력됨
-					profileProfileImg = s3Uploader.uploadFiles(file, "gugu-post");
-					System.out.println("s3 file url : " + fileName);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+    	profileProfileImg= fileService.uploadFile(files);
+
+//		String fileName = "";
+//		
+//		if (files != null) {
+//			for(MultipartFile file : files) {
+//				try {
+//					// s3 file 링크로 fileName 받아와서 postImg data로 저장하면 src로 걍 링크를 긁어오면 화면에 출력됨
+//					profileProfileImg = s3Uploader.uploadFiles(file, "gugu-post");
+//					System.out.println("s3 file url : " + fileName);
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		}
 		
 		User user = User.builder()
 						  .kakaoId(profile.getId())

@@ -2,7 +2,7 @@
 <ul>
 <li>✨ 프로젝트 명 : 999.com</li>
 <li>🙎🏻‍♀️ 팀 장 : 김륜경(<a href="https://github.com/loisRK">loisRK</a>)</li>
-<li>🙌🏻 팀 원 : 채근영(<a href="https://github.com/cgy0627">gy</a>), 
+<li>🙌🏻 팀 원 : 채근영(<a href="https://github.com/cgy0627">chaenny</a>), 
                    최민기(<a href="https://github.com/GRIN-96">Grin_:)</a>),
                    조혜원(<a href="https://github.com/hwch0">hwch0</a>),
                    이나현(<a href="https://github.com/illcnd921">nahyeon_eel</a>)
